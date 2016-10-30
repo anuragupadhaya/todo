@@ -1,0 +1,55 @@
+.form-hide {
+	display: none;
+}
+
+ul.ui-autocomplete {
+	z-index: 1100;
+	position: absolute;
+	cursor: default;
+	border: 2px solid #ccc;
+	padding: 0px 0;
+	border-radius: 2px;
+}
+
+ul.ui-autocomplete {
+	padding-top: 0;
+}
+
+.ui-state-hover,
+.ui-widget-content .ui-state-hover,
+.ui-widget-header .ui-state-hover,
+.ui-state-focus,
+.ui-widget-content .ui-state-focus,
+.ui-widget-header .ui-state-focus {
+	font-weight: normal !important;
+}
+
+.ui-state-active,
+.ui-widget-content .ui-state-active,
+.ui-widget-header .ui-state-active,
+.ui-autocomplete,
+.ui-autocomplete:hover,
+.ui-menu-item,
+.ui-menu-item:hover,
+.ui-menu-item a,
+.ui-menu-item a:hover,
+.ui-widget-content .ui-state-focus,
+.ui-widget-header .ui-state-focus,
+.ui-widget-content .ui-state-hover,
+.ui-widget-header .ui-state-hover,
+.ui-menu .ui-menu-item a.ui-state-focus,
+.ui-menu .ui-menu-item a.ui-state-active,
+.ui-menu .ui-menu-item a {
+	background: #f0f0f0 none no-repeat;
+	padding: 0;
+	margin: 0;
+	display: block;
+	border: 2;
+	border-collapse: collapse;
+}
+
+.ui-helper-hidden-accessible {
+	display: none;
+}
+
+.ui-autocomplete-loading { background:url('images/load.gif') no-repeat right center; }
