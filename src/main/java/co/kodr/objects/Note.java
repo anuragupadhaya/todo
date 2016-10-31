@@ -27,7 +27,7 @@ public class Note {
 
 	@Override
 	public int hashCode() {
-		return this.toString().hashCode();
+		return this.getText().hashCode();
 	}
 
 	@Override

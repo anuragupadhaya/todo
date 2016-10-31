@@ -27,4 +27,15 @@ public class TestDBManager {
 		assertNotNull(newNote.getId());
 	}
 
+	@Test
+	public final void testUpdateNote() {
+		String text = "New note";
+		Note note = new Note();
+		note.setText(text);
+		Note newNote = new DBManager().addNote(note);
+		assertNotNull(newNote.getId());
+		text = "Updated note";
+		assertTrue(new DBManager().updateNote(newNote, text));
+	}
+
 }

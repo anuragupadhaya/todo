@@ -1,42 +1,36 @@
-# ************************************************************
-# Sequel Pro SQL dump
-# Version 4541
-#
-# http://www.sequelpro.com/
-# https://github.com/sequelpro/sequelpro
-#
-# Host: 127.0.0.1 (MySQL 5.5.5-10.1.13-MariaDB)
-# Database: todo-app
-# Generation Time: 2016-10-31 16:26:28 +0000
-# ************************************************************
+-- phpMyAdmin SQL Dump
+-- version 4.5.2
+-- http://www.phpmyadmin.net
+--
+-- Host: localhost
+-- Generation Time: Oct 31, 2016 at 08:32 PM
+-- Server version: 10.1.13-MariaDB
+-- PHP Version: 5.6.21
 
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+--
+-- Database: `todo-app`
+--
+CREATE DATABASE IF NOT EXISTS `todo-app` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `todo-app`;
 
+-- --------------------------------------------------------
 
-# Dump of table notes
-# ------------------------------------------------------------
+--
+-- Table structure for table `notes`
+--
+-- Creation: Oct 31, 2016 at 04:24 PM
+--
 
 DROP TABLE IF EXISTS `notes`;
-
-CREATE TABLE `notes` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `notes` (
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `note` varchar(500) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 
-
-
-
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+--
+-- RELATIONS FOR TABLE `notes`:
+--
