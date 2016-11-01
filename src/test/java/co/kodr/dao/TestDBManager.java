@@ -8,12 +8,13 @@ import java.sql.Connection;
 import org.junit.Test;
 
 import co.kodr.objects.Note;
+import co.kodr.utils.db.DBUtils;
 
 public class TestDBManager {
 
 	@Test
 	public final void testGetDBConnection() {
-		Connection connection = new DBManager().getDBConnection();
+		Connection connection = DBUtils.getConnection();
 		assertNotNull(connection);
 		assertTrue(connection instanceof Connection);
 	}
