@@ -36,7 +36,7 @@ public class DBUtils {
 				connection = getNewDataBaseConnection();
 			}
 		} catch (SQLException e) {
-			logger.warn("Connection was closed! Making a new Connection...", e);
+			logger.warn("Error connecting to Database. Connection was closed previously:", e);
 		}
 		return connection;
 	}
@@ -59,8 +59,6 @@ public class DBUtils {
 			logger.error("Error loading Database Driver class:", e);
 		} catch (SQLException e) {
 			logger.error("Error establishing Database connection:", e);
-		} catch (Throwable t) {
-			logger.error("One or more connection parameters are null or invalid", t);
 		}
 
 		if (connection != null) {
@@ -77,19 +75,14 @@ public class DBUtils {
 	 */
 	private static void initializeDBProperties() {
 		Properties config = Utils.readConfiguration();
-		try {
-			driver = config.getProperty(DBConstants.DB_DRIVER, "com.mysql.jdbc.Driver");
-			prefix = config.getProperty(DBConstants.DB_JDBC_PREFIX, "jdbc:mysql://");
-			host = config.getProperty(DBConstants.DB_HOST, "localhost");
-			port = config.getProperty(DBConstants.DB_PORT, "3306");
-			database = config.getProperty(DBConstants.DB_NAME, "todo-app");
-			user = config.getProperty(DBConstants.DB_USER, "root");
-			password = config.getProperty(DBConstants.DB_PASSWORD, "");
-			logger.debug("DB Properties read:" + config.toString());
-		} catch (Throwable t) {
-			logger.error("Error in initializing Database Parameters", t);
-		}
-
+		driver = config.getProperty(DBConstants.DB_DRIVER, "com.mysql.jdbc.Driver");
+		prefix = config.getProperty(DBConstants.DB_JDBC_PREFIX, "jdbc:mysql://");
+		host = config.getProperty(DBConstants.DB_HOST, "localhost");
+		port = config.getProperty(DBConstants.DB_PORT, "3306");
+		database = config.getProperty(DBConstants.DB_NAME, "todo-app");
+		user = config.getProperty(DBConstants.DB_USER, "root");
+		password = config.getProperty(DBConstants.DB_PASSWORD, "");
+		logger.debug("DB Properties read:" + config.toString());
 	}
 
 	public static void close() {

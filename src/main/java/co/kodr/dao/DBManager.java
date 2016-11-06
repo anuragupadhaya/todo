@@ -50,21 +50,19 @@ public class DBManager {
 		ResultSet resultSet = null;
 		Note newNote = null;
 		try {
-			preparedStatement = DBUtils.getConnection().prepareStatement(INSERT_NOTE);
+			preparedStatement = DBUtils.getConnection().prepareStatement(INSERT_NOTE, Statement.RETURN_GENERATED_KEYS);
 			preparedStatement.setString(1, note.getText());
 			int result = preparedStatement.executeUpdate();
 
+			resultSet = preparedStatement.getGeneratedKeys();
 			// if inserted successfully, result count will be 1
 			if (result == 1) {
 				newNote = new Note();
 				newNote.setText(note.getText());
-				statement = DBUtils.getConnection().createStatement();
-				// SELECT ALL from db again
-				resultSet = statement.executeQuery(GET_ALL_NOTES);
 				if (resultSet != null) {
-					// GOTO last row of db. That will be the latest record.
-					resultSet.last();
-					newNote.setId(resultSet.getInt(1));
+					if (resultSet.next()) {
+						newNote.setId(resultSet.getInt(1));
+					}
 					logger.debug("Successfully added Note:" + newNote.toString());
 				}
 			} else {

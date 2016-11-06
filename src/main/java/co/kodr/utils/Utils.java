@@ -22,8 +22,6 @@ public class Utils {
 			config.load(Utils.class.getClassLoader().getResourceAsStream(DBConstants.DB_PROPERTIES));
 		} catch (IOException e) {
 			logger.error("Error opening properties file:", e);
-		} catch (Throwable t) {
-			logger.error("Error in parsing/initializing properties file:", t);
 		}
 		return config;
 	}
