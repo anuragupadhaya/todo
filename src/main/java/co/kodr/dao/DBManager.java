@@ -5,6 +5,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
@@ -29,12 +31,53 @@ public class DBManager {
 	// SELECT ALL SQL query
 	private String GET_ALL_NOTES = "SELECT * FROM {0}";
 
-	DBManager() {
+	public DBManager() {
 		Properties config = Utils.readConfiguration();
 		notes_table = config.getProperty("notes_table", "notes");
 		INSERT_NOTE = MessageFormat.format(INSERT_NOTE, notes_table);
 		UPDATE_NOTE = MessageFormat.format(UPDATE_NOTE, notes_table);
 		GET_ALL_NOTES = MessageFormat.format(GET_ALL_NOTES, notes_table);
+	}
+
+	/**
+	 * Get all the notes from the database
+	 * 
+	 * @return List of all notes
+	 */
+	public List<Note> getAllNotes() {
+		Statement statement = null;
+		ResultSet resultSet = null;
+		List<Note> noteList = new ArrayList<>();
+
+		try {
+			statement = DBUtils.getConnection().createStatement();
+			resultSet = statement.executeQuery(GET_ALL_NOTES);
+			if (resultSet != null) {
+				while (resultSet.next()) {
+					Note note = new Note();
+					note.setId(resultSet.getInt(1));
+					note.setText(resultSet.getString(2));
+					noteList.add(note);
+				}
+			}
+		} catch (SQLException e) {
+			logger.error("Error in fetching all notes from DB!", e);
+		} finally {
+			try {
+				if (statement != null) {
+					statement.close();
+				}
+				if (resultSet != null) {
+					resultSet.close();
+				}
+
+				DBUtils.close();
+			} catch (SQLException e) {
+				logger.error("Error in closing Database resources:", e);
+			}
+		}
+
+		return noteList;
 	}
 
 	/**
@@ -97,17 +140,17 @@ public class DBManager {
 	 *            to be updated
 	 * @return True, if update successful
 	 */
-	public boolean updateNote(Note note, String text) {
+	public boolean updateNote(Note note) {
 		PreparedStatement preparedStatement = null;
 		Statement statement = null;
 
 		try {
 			preparedStatement = DBUtils.getConnection().prepareStatement(UPDATE_NOTE);
-			preparedStatement.setString(1, text);
+			preparedStatement.setString(1, note.getText());
 			preparedStatement.setInt(2, note.getId());
 			int result = preparedStatement.executeUpdate();
 			if (result == 1) {
-				logger.debug("Successfully updated Note:" + note.toString() + " with text:" + text);
+				logger.debug("Successfully updated Note:" + note.toString());
 				return true;
 			} else {
 				throw new Exception("More than 1 row updated while updating the note!");

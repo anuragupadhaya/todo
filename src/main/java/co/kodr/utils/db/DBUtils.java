@@ -36,8 +36,9 @@ public class DBUtils {
 				connection = getNewDataBaseConnection();
 			}
 		} catch (SQLException e) {
-			logger.warn("Error connecting to Database. Connection was closed previously:", e);
+			logger.warn("Connection was closed previously:", e);
 		}
+
 		return connection;
 	}
 
