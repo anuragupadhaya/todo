@@ -17,7 +17,7 @@
 		<servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
 		<init-param>
 			<param-name>jersey.config.server.provider.packages</param-name>
-			<param-value>co.kodr.impl</param-value>
+			<param-value>co.kodr.api</param-value>
 		</init-param>
 		<init-param>
 		<param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
