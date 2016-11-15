@@ -5,6 +5,37 @@ $("#add_task_button").click(function(){
 
 function addRowDynamically() {
 	var task_value = $("#task_name").val(); // Retreive value of text box
-	var tasklist = $(".task_lists"); // Retreive DOM of task_list class (Used for table)
-	$(tasklist).append('<tr><td>'+task_value+'</td><td><a class="btn btn-info" href="#" role="button">Modify</a></td><td><a class="btn btn-danger" href="#" role="button">Delete</a></td></tr>');//Append with value retrieve from text box to DOM of task list
+	
+	
+	$.ajax({
+        url: './api/add',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({
+            text: task_value
+        }),
+        dataType: 'json',
+		success: function(data, statusText, xhr){checkAddData(data, statusText, xhr, task_value)},
+		error: function(jqXHR, textStatus, errorThrown) { showError(); }
+    });
+}
+
+function checkAddData(data, statusText, xhr, task_value) {
+	var status = xhr.status;                //200
+  	var head = xhr.getAllResponseHeaders(); //Detail header info
+  	var tasklist = $(".task_lists"); // Retreive DOM of task_list class (Used for table)
+  	
+  	if (status == 201) {
+  		var id = data["id"]; // Set ID retreived from response
+  		$(tasklist).append('<tr><td>'+task_value+'</td><td><a class="btn btn-info" href="#mod'+id+'" role="button">Modify</a></td><td><a class="btn btn-danger" href="#del'+id+'" role="button">Delete</a></td></tr>');//Append with value retrieve from text box to DOM of task list
+  		$("#task_name").val('');//And after append clear the text box
+  	}
+  	else {
+  		showError();
+  	}
+}
+
+
+function showError(){
+	console.log("Ouch! An error happened!")
 }
