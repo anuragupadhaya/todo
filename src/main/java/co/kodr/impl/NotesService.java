@@ -36,4 +36,9 @@ public class NotesService implements INotes {
 		return dao.updateNote(note);
 	}
 
+	@Override
+	public boolean deleteNote(String noteId) {
+		return dao.deleteNote(noteId);
+	}
+
 }

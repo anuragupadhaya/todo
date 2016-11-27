@@ -31,12 +31,16 @@ public class DBManager {
 	// SELECT ALL SQL query
 	private String GET_ALL_NOTES = "SELECT * FROM {0}";
 
+	// DELETE SQL query
+	private String DELETE_NOTE = "DELETE FROM {0} WHERE `id` =?";
+
 	public DBManager() {
 		Properties config = Utils.readConfiguration();
 		notes_table = config.getProperty("notes_table", "notes");
 		INSERT_NOTE = MessageFormat.format(INSERT_NOTE, notes_table);
 		UPDATE_NOTE = MessageFormat.format(UPDATE_NOTE, notes_table);
 		GET_ALL_NOTES = MessageFormat.format(GET_ALL_NOTES, notes_table);
+		DELETE_NOTE = MessageFormat.format(DELETE_NOTE, notes_table);
 	}
 
 	/**
@@ -136,8 +140,7 @@ public class DBManager {
 	 * Update text of existing Note in database
 	 * 
 	 * @param note
-	 * @param text
-	 *            to be updated
+	 *            text to be updated
 	 * @return True, if update successful
 	 */
 	public boolean updateNote(Note note) {
@@ -153,10 +156,50 @@ public class DBManager {
 				logger.debug("Successfully updated Note:" + note.toString());
 				return true;
 			} else {
-				throw new Exception("More than 1 row updated while updating the note!");
+				// TODO review this
+				throw new Exception();
 			}
 		} catch (Exception e) {
-			logger.error("SQL error in updating Note:" + note.toString(), e);
+			logger.error("Error in updating Note:" + note.toString(), e);
+		} finally {
+			try {
+				if (preparedStatement != null) {
+					preparedStatement.close();
+				}
+				if (statement != null) {
+					statement.close();
+				}
+				DBUtils.close();
+			} catch (SQLException e) {
+				logger.error("Error in closing Database resources:", e);
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Deletes Note from the DB
+	 * 
+	 * @param noteId
+	 * @return True, if Delete successful
+	 */
+	public boolean deleteNote(String noteId) {
+		PreparedStatement preparedStatement = null;
+		Statement statement = null;
+
+		try {
+			preparedStatement = DBUtils.getConnection().prepareStatement(DELETE_NOTE);
+			preparedStatement.setInt(1, Integer.valueOf(noteId));
+			int result = preparedStatement.executeUpdate();
+			if (result == 1) {
+				logger.debug("Successfully deleted Note with ID:" + noteId);
+				return true;
+			} else {
+				// TODO review this
+				throw new Exception();
+			}
+		} catch (Exception e) {
+			logger.error("Error in deleting Note with ID:" + noteId, e);
 		} finally {
 			try {
 				if (preparedStatement != null) {

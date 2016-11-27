@@ -32,4 +32,12 @@ public interface INotes {
 	 * @return Note() object with updated text
 	 */
 	boolean updateNote(Note note);
+
+	/**
+	 * Deletes Note with noteId in the DB
+	 * 
+	 * @param noteId
+	 * @return
+	 */
+	boolean deleteNote(String noteId);
 }

@@ -3,10 +3,12 @@ package co.kodr.api;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -92,7 +94,7 @@ public class NotesAPI {
 			logger.error(e);
 		} catch (Exception e) {
 			response = Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
-			logger.error(e);
+			logger.error("Error connecting to the Database!", e);
 		}
 
 		return response;
@@ -128,8 +130,39 @@ public class NotesAPI {
 			logger.error(e);
 		} catch (Exception e) {
 			response = Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
-			logger.error(e);
+			logger.error("Error connecting to the Database!", e);
 		}
+		return response;
+	}
+
+	/**
+	 * 
+	 * 
+	 * 
+	 */
+	@DELETE
+	@Path("remove/{id}")
+	public Response deleteNote(@PathParam("id") String noteId) {
+		response = null;
+		boolean deleted = false;
+		try {
+
+			deleted = service.deleteNote(noteId);
+
+			if (deleted == false) {
+				throw new NoteException("Note could not be deleted with ID:" + noteId);
+			} else {
+				response = Response.status(Response.Status.NO_CONTENT).build();
+			}
+
+		} catch (NoteException e) {
+			response = Response.status(Response.Status.BAD_REQUEST).build();
+			logger.error(e);
+		} catch (Exception e) {
+			response = Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+			logger.error("Error connecting to the Database!", e);
+		}
+
 		return response;
 	}
 }
