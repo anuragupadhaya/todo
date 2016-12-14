@@ -37,5 +37,10 @@ function checkAddData(data, statusText, xhr, task_value) {
 
 
 function showError(){
-	console.log("Ouch! An error happened!")
+	var netalrt =  $(".network-alert"); // Retreive DOM of network alert
+	$(netalrt).html('<div class="alert alert-danger" id="network-error-alert"> <button type="button" class="close" data-dismiss="alert">x</button> <strong>Oops! </strong>   Unable to add To-Do.</div>'); // replace the value to network alert DOM
+	// Autohide Network Error Alert after 2 seconds.
+	$("#network-error-alert").fadeTo(2000, 500).slideUp(500, function(){
+	    $("network-error-alert").alert('close');
+	});
 }
