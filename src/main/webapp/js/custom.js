@@ -74,8 +74,6 @@ function fetchData(){
 }
 
 function renderTable(rowData){
-	console.log(rowData.id + ' - ' + rowData.text );
-
 	var tasklist = $(".task_lists"); // Retreive DOM of task_list class
 	var task_value = rowData.text;
 	var id = rowData.id;
