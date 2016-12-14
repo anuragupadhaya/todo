@@ -44,3 +44,40 @@ function showError(){
 	    $("network-error-alert").alert('close');
 	});
 }
+
+
+// Fetch data on initial loading of page
+$( document ).ready(fetchData());
+function fetchData(){
+	var netalrt =  $(".network-alert"); // Retreive DOM of network alert
+	
+	$(netalrt).html('<div class="alert alert-info" id="network-loading-alert"> <button type="button" class="close" data-dismiss="alert">x</button> <strong>Welcome! </strong>   Please wait while To-Do list is getting loaded.</div>'); // replace the value to network alert DOM
+	// Get data
+	setTimeout(function(){
+		$.get('./api/all', function(data){
+			
+			for (var i = 0; i < data.length; i++){
+				renderTable(data[i]);
+			}
+			
+			$("#network-loading-alert").fadeTo(2000, 500).slideUp(500, function(){
+			    $("network-error-alert").alert('close');
+			});
+		}) .fail(function(){
+			$(netalrt).html('<div class="alert alert-danger" id="network-loading-alert">  <strong>Oops! </strong>   There was an error while retreiving To-Do list. Please refresh the page again</div>'); // replace the value to network alert DOM
+		});
+
+	},2000); 
+	
+	
+	
+}
+
+function renderTable(rowData){
+	console.log(rowData.id + ' - ' + rowData.text );
+
+	var tasklist = $(".task_lists"); // Retreive DOM of task_list class
+	var task_value = rowData.text;
+	var id = rowData.id;
+	$(tasklist).append('<tr><td>'+task_value+'</td><td><a class="btn btn-info" href="#mod'+id+'" role="button">Modify</a></td><td><a class="btn btn-danger" href="#del'+id+'" role="button">Delete</a></td></tr>');//Append with value retrieve from get method
+}
