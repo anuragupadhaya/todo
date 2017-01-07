@@ -27,7 +27,7 @@ function checkAddData(data, statusText, xhr, task_value) {
   	
   	if (status == 201) {
   		var id = data["id"]; // Set ID retreived from response
-  		$(tasklist).append('<tr id="row_'+task_value+'"><td>'+task_value+'</td><td><a class="btn btn-info" href="#mod'+id+'" role="button">Modify</a></td><td><a class="btn btn-danger" id="todo_data_delete" href="#" value="'+id+'" role="button">Delete</a></td></tr>');//Append with value retrieve from text box to DOM of task list
+  		$(tasklist).append('<tr id="row_'+task_value+'"><td id="data_value_'+task_value+'">'+task_value+'</td><td><a class="btn btn-info todo-data-modify" id="'+id+'" href="#mod'+id+'" role="button">Modify</a></td><td><a class="btn btn-danger" id="todo_data_delete" href="#" value="'+id+'" role="button">Delete</a></td></tr>');//Append with value retrieve from text box to DOM of task list
   		$("#task_name").val('');//And after append clear the text box
   	}
   	else {
@@ -77,7 +77,7 @@ function renderTable(rowData){
 	var tasklist = $(".task_lists"); // Retreive DOM of task_list class
 	var task_value = rowData.text;
 	var id = rowData.id;
-	$(tasklist).append('<tr id="row_'+id+'"><td>'+task_value+'</td><td><a class="btn btn-info todo-data-modify" id="'+id+'" href="#mod'+id+'" role="button">Modify</a></td><td><a class="btn btn-danger" id="todo_data_delete" href="#" value="'+id+'" role="button">Delete</a></td></tr>');//Append with value retrieve from get method
+	$(tasklist).append('<tr id="row_'+id+'"><td id="data_value_'+id+'">'+task_value+'</td><td><a class="btn btn-info todo-data-modify" id="'+id+'" href="#mod'+id+'" role="button">Modify</a></td><td><a class="btn btn-danger" id="todo_data_delete" href="#" value="'+id+'" role="button">Delete</a></td></tr>');//Append with value retrieve from get method
 }
 
 // Delete Function, to be strange, $("#todo_data_delete").click(function(){}); was not working hence this method is used to call. Most probably due to it fact that these rows are ajax genereted.
@@ -106,4 +106,46 @@ $(document).on("click", "#todo_data_delete", function() {
 		
 		}
     });
+});
+
+
+// Update Function
+$(document).on("click", ".todo-data-modify", function() {
+	var value = $(this).attr("id");
+	modifyModal(value); 
+	
+});
+
+// This function creates modal for modifying value
+function modifyModal(id){
+	
+	var netalrt =  $(".network-alert");
+	$(netalrt).html('<div class="modal fade update_modal" tabindex="-1" role="dialog"> <div class="modal-dialog" role="document"> <div class="modal-content">  <div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button> <h4 class="modal-title">Edit To-Do List</h4></div> <div class="modal-body"> <form id="update-text-form" action="'+id+'"> <div class="form-group"> <input class="update-text form-control" id="update-text" placeholder="Enter New To-Do"></div><br><div class="updateError"></div> </div> <div class="modal-footer"> <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>  <button type="button" class="btn btn-primary save-update-form">Save changes</button></div> </div><!-- /.modal-content --> </div><!-- /.modal-dialog --></div><!-- /.modal --></form> ');
+	$('.update_modal').modal('show');
+}
+
+//Upon clicking save changes, do the needful
+$(document).on("click", ".save-update-form", function() { 
+	var id = $("#update-text-form").attr("action");
+	var data = $("#update-text").val();
+	$.ajax({ 
+		url: './api/update',
+		type: 'PUT',
+		contentType: 'application/json',
+        data: JSON.stringify({
+        	"id": id,
+        	"text": data
+        }),
+        success: function(){// On success, hide modal and change value on the to do list
+        	$('.update_modal').modal('hide');
+        	$('#data_value_'+id).html(data);
+        },
+        error:function(){ // Upon error, show error message for 2 seconds.
+        	$(".updateError").html('<div class="alert alert-danger" id="update-error">  <strong>Oops! </strong>   There was an error while updating To-Do list</div>');
+        	$(".updateError").fadeTo(2000, 500).slideUp(500, function(){
+			    $("#update-alert").alert('close');
+			});
+        }
+		
+	});
 });
